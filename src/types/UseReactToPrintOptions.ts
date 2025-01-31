@@ -1,6 +1,6 @@
 import { RefObject } from "react";
-import type { Font } from "./font";
 import { ContentNode } from "./ContentNode";
+import type { Font } from "./font";
 
 /** Options for `useReactToPrint` */
 export interface UseReactToPrintOptions {
@@ -15,6 +15,9 @@ export interface UseReactToPrintOptions {
     documentTitle?: string;
     /** A list of fonts to load into the printing iframe. This is useful if you are using custom fonts */
     fonts?: Font[];
+    /** Whether to wait for loading of resources or not 
+     * default: true **/
+    waitForResourceLoading?: boolean;
     /** Ignore all `<style>` and `<link type="stylesheet" />` tags from `<head>` */
     ignoreGlobalStyles?: boolean;
     /**
@@ -27,6 +30,10 @@ export interface UseReactToPrintOptions {
      * selected to print or cancel_
      */
     onAfterPrint?: () => void;
+    /**
+     * Callback function that triggers once the dailog is open
+     */
+    onPrintDailogOpen?: () => void;
     /**
      * Callback function that triggers before print. This can be used to change the content on the
      * page before printing as an alternative to, or in conjunction with `@media print` queries. Is

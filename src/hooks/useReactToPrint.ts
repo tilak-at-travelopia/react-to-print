@@ -1,17 +1,17 @@
 import { useCallback } from "react";
 
 import { Font } from "../types/font";
-import type { UseReactToPrintOptions } from "../types/UseReactToPrintOptions";
-import { getContentNode } from "../utils/getContentNode";
-import { generatePrintWindow } from "../utils/generatePrintWindow";
-import { logMessages } from "../utils/logMessage";
-import { UseReactToPrintHookContent } from "../types/UseReactToPrintHookContent";
-import { HandlePrintWindowOnLoadData } from "../utils/handlePrintWindowOnLoad";
-import { removePrintIframe } from "../utils/removePrintIframe";
 import { UseReactToPrintFn } from "../types/UseReactToPrintFn";
+import { UseReactToPrintHookContent } from "../types/UseReactToPrintHookContent";
+import type { UseReactToPrintOptions } from "../types/UseReactToPrintOptions";
 import { appendPrintWindow } from "../utils/appendPrintWindow";
-import { startPrint } from "../utils/startPrint";
+import { generatePrintWindow } from "../utils/generatePrintWindow";
+import { getContentNode } from "../utils/getContentNode";
 import { getErrorFromUnknown } from "../utils/getErrorMessage";
+import { HandlePrintWindowOnLoadData } from "../utils/handlePrintWindowOnLoad";
+import { logMessages } from "../utils/logMessage";
+import { removePrintIframe } from "../utils/removePrintIframe";
+import { startPrint } from "../utils/startPrint";
 
 export function useReactToPrint(options: UseReactToPrintOptions): UseReactToPrintFn {
     const {
@@ -22,6 +22,8 @@ export function useReactToPrint(options: UseReactToPrintOptions): UseReactToPrin
         onPrintError,
         preserveAfterPrint,
         suppressErrors,
+        onPrintDailogOpen,
+        waitForResourceLoading
     } = options;
 
     const handlePrint = useCallback((optionalContent?: UseReactToPrintHookContent) => {
@@ -52,11 +54,11 @@ export function useReactToPrint(options: UseReactToPrintOptions): UseReactToPrin
 
         const numFonts = fonts ? fonts.length : 0;
 
-        const numResourcesToLoad =
+        const numResourcesToLoad = (waitForResourceLoading ?? true ) ? (
             (ignoreGlobalStyles ? 0 : globalLinkNodes.length) +
             clonedImgNodes.length +
             clonedVideoNodes.length +
-            numFonts;
+            numFonts) : 0;
         const resourcesLoaded: (Element | Font | FontFace)[] = [];
         const resourcesErrored: (Element | Font | FontFace)[] = [];
 
@@ -95,6 +97,7 @@ export function useReactToPrint(options: UseReactToPrintOptions): UseReactToPrin
 
             if (numResourcesManaged === numResourcesToLoad) {
                 startPrint(printWindow, options);
+                setTimeout(() => onPrintDailogOpen?.(),500);
             }
         };
 
