@@ -22,9 +22,10 @@ export function useReactToPrint(options: UseReactToPrintOptions): UseReactToPrin
         onPrintError,
         preserveAfterPrint,
         suppressErrors,
-        onPrintDailogOpen,
-        waitForResourceLoading
+        onPrintDailogOpen
     } = options;
+
+    options.waitForResourceLoading = options.waitForResourceLoading ?? true;
 
     const handlePrint = useCallback((optionalContent?: UseReactToPrintHookContent) => {
         // Ensure we remove any pre-existing print windows before adding a new one
@@ -54,11 +55,11 @@ export function useReactToPrint(options: UseReactToPrintOptions): UseReactToPrin
 
         const numFonts = fonts ? fonts.length : 0;
 
-        const numResourcesToLoad = (waitForResourceLoading ?? true ) ? (
+        const numResourcesToLoad =
             (ignoreGlobalStyles ? 0 : globalLinkNodes.length) +
             clonedImgNodes.length +
             clonedVideoNodes.length +
-            numFonts) : 0;
+            numFonts;
         const resourcesLoaded: (Element | Font | FontFace)[] = [];
         const resourcesErrored: (Element | Font | FontFace)[] = [];
 

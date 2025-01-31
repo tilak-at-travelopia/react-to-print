@@ -1,9 +1,9 @@
-import {logMessages} from "./logMessage";
-import {startPrint} from "./startPrint";
-import {Font} from "../types/font";
-import type {UseReactToPrintOptions} from "../types/UseReactToPrintOptions";
+import { Font } from "../types/font";
+import type { UseReactToPrintOptions } from "../types/UseReactToPrintOptions";
 import { cloneShadowRoots } from "./clone";
 import { getErrorFromUnknown } from "./getErrorMessage";
+import { logMessages } from "./logMessage";
+import { startPrint } from "./startPrint";
 
 export interface HandlePrintWindowOnLoadData {
     /** The content. */
@@ -62,7 +62,8 @@ export function handlePrintWindowOnLoad(
         pageStyle,
         nonce,
         suppressErrors,
-        copyShadowRoots
+        copyShadowRoots,
+        waitForResourceLoading
     } = options;
 
     // Some agents, such as IE11 and Enzyme (as of 2 Jun 2020) continuously call the
@@ -121,9 +122,10 @@ export function handlePrintWindowOnLoad(
             domDoc.body.classList.add(...bodyClass.split(" "));
         }
 
-        // Copy canvases
-        const targetCanvasEls = domDoc.querySelectorAll("canvas");
-        for (let i = 0; i < originalCanvasNodes.length; ++i) {
+        if(waitForResourceLoading) {
+            // Copy canvases
+            const targetCanvasEls = domDoc.querySelectorAll("canvas");
+            for (let i = 0; i < originalCanvasNodes.length; ++i) {
             // NOTE: must use original data here as the canvass elements in `clonedContentNode` will
             // not have had their painted images copied properly. This is specifically mentioned in
             // the [`cloneNode` docs](https://developer.mozilla.org/en-US/docs/Web/API/Node/cloneNode).
@@ -146,10 +148,10 @@ export function handlePrintWindowOnLoad(
             if (targetCanvasContext) {
                 targetCanvasContext.drawImage(sourceCanvas, 0, 0);
             }
-        }
+            }
 
-        // Pre-load images
-        for (let i = 0; i < clonedImgNodes.length; i++) {
+            // Pre-load images
+            for (let i = 0; i < clonedImgNodes.length; i++) {
             const imgNode = clonedImgNodes[i];
             const imgSrc = imgNode.getAttribute("src");
 
@@ -166,10 +168,10 @@ export function handlePrintWindowOnLoad(
                 };
                 img.src = imgSrc;
             }
-        }
+            }
 
-        // Pre-load videos
-        for (let i = 0; i < clonedVideoNodes.length; i++) {
+            // Pre-load videos
+            for (let i = 0; i < clonedVideoNodes.length; i++) {
             const videoNode = clonedVideoNodes[i];
             videoNode.preload = 'auto'; // Hint to the browser that it should load this resource
 
@@ -207,8 +209,8 @@ export function handlePrintWindowOnLoad(
                     }
                 }
             }
+            }
         }
-
         // Copy select states. Without this, the first select option is printed, regardless of
         // selection state
         const selectSelector = 'select';
@@ -322,7 +324,7 @@ export function handlePrintWindowOnLoad(
         }
     }
 
-    if (numResourcesToLoad === 0) {
+    if (numResourcesToLoad === 0 || !waitForResourceLoading) {
         startPrint(printWindow, options);
     }
 }
