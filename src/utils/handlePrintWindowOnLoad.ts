@@ -164,7 +164,7 @@ export function handlePrintWindowOnLoad(
                     markLoaded(imgNode);
                 };
                 img.onerror = (_event, _source, _lineno, _colno, error) => {
-                    markLoaded(imgNode, ["Error loading <img> working?", imgNode, "Error", error]);
+                    markLoaded(imgNode, ["Error loading <img>", imgNode, "Error", error]);
                 };
                 img.src = imgSrc;
             }

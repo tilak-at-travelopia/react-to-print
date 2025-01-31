@@ -21,8 +21,7 @@ export function useReactToPrint(options: UseReactToPrintOptions): UseReactToPrin
         onBeforePrint,
         onPrintError,
         preserveAfterPrint,
-        suppressErrors,
-        onPrintDailogOpen
+        suppressErrors
     } = options;
 
     const handlePrint = useCallback((optionalContent?: UseReactToPrintHookContent) => {
@@ -96,7 +95,6 @@ export function useReactToPrint(options: UseReactToPrintOptions): UseReactToPrin
 
             if (numResourcesManaged === numResourcesToLoad) {
                 startPrint(printWindow, options);
-                setTimeout(() => onPrintDailogOpen?.(),500);
             }
         };
 

@@ -1,7 +1,7 @@
-import { logMessages } from "./logMessage";
-import { removePrintIframe } from "./removePrintIframe";
 import type { UseReactToPrintOptions } from "../types/UseReactToPrintOptions";
 import { getErrorFromUnknown } from "./getErrorMessage";
+import { logMessages } from "./logMessage";
+import { removePrintIframe } from "./removePrintIframe";
 
 /**
  * Starts the main printing process. This includes determining if we are running the default
@@ -17,20 +17,11 @@ export function startPrint(printWindow: HTMLIFrameElement, options: UseReactToPr
         preserveAfterPrint,
         print,
         suppressErrors,
-        onPrintDailogOpen
     } = options;
 
     
     // Some browsers such as Safari don't always behave well without this timeout
     setTimeout(() => {
-      logMessages({
-        messages: [
-          "running onPrintDailogOpen",
-          JSON.stringify(onPrintDailogOpen),
-        ],
-        suppressErrors,
-      });
-
         if (printWindow.contentWindow) {
             printWindow.contentWindow.focus(); // Needed for IE 11
 

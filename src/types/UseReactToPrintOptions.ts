@@ -31,10 +31,6 @@ export interface UseReactToPrintOptions {
      */
     onAfterPrint?: () => void;
     /**
-     * Callback function that triggers once the dailog is open
-     */
-    onPrintDailogOpen?: () => void;
-    /**
      * Callback function that triggers before print. This can be used to change the content on the
      * page before printing as an alternative to, or in conjunction with `@media print` queries. Is
      * run prior to the print iframe being mounted.
