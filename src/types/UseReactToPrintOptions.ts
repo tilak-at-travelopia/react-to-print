@@ -16,8 +16,8 @@ export interface UseReactToPrintOptions {
     /** A list of fonts to load into the printing iframe. This is useful if you are using custom fonts */
     fonts?: Font[];
     /** Whether to wait for loading of resources or not 
-     * default: true **/
-    waitForResourceLoading?: boolean;
+     * default: false **/
+    dontWaitForResourceLoading?: boolean;
     /** Ignore all `<style>` and `<link type="stylesheet" />` tags from `<head>` */
     ignoreGlobalStyles?: boolean;
     /**

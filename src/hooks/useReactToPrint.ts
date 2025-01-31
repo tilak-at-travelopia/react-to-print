@@ -25,8 +25,6 @@ export function useReactToPrint(options: UseReactToPrintOptions): UseReactToPrin
         onPrintDailogOpen
     } = options;
 
-    options.waitForResourceLoading = options.waitForResourceLoading ?? true;
-
     const handlePrint = useCallback((optionalContent?: UseReactToPrintHookContent) => {
         // Ensure we remove any pre-existing print windows before adding a new one
         removePrintIframe(preserveAfterPrint, true);

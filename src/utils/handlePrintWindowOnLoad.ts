@@ -63,7 +63,7 @@ export function handlePrintWindowOnLoad(
         nonce,
         suppressErrors,
         copyShadowRoots,
-        waitForResourceLoading
+        dontWaitForResourceLoading
     } = options;
 
     // Some agents, such as IE11 and Enzyme (as of 2 Jun 2020) continuously call the
@@ -122,7 +122,7 @@ export function handlePrintWindowOnLoad(
             domDoc.body.classList.add(...bodyClass.split(" "));
         }
 
-        if(waitForResourceLoading) {
+        if(!dontWaitForResourceLoading) {
             // Copy canvases
             const targetCanvasEls = domDoc.querySelectorAll("canvas");
             for (let i = 0; i < originalCanvasNodes.length; ++i) {
@@ -324,7 +324,7 @@ export function handlePrintWindowOnLoad(
         }
     }
 
-    if (numResourcesToLoad === 0 || !waitForResourceLoading) {
+    if (numResourcesToLoad === 0 || dontWaitForResourceLoading) {
         startPrint(printWindow, options);
     }
 }
